@@ -1,7 +1,15 @@
 package com.atipera.recruitment_task.service;
 
-import org.springframework.stereotype.Service;
+import com.atipera.recruitment_task.model.Branch;
+import com.atipera.recruitment_task.model.Repo;
+import com.atipera.recruitment_task.model.Response;
 
-@Service
-public class RestSpringbootService {
+import java.util.List;
+
+public interface RestSpringbootService {
+
+    List<Repo> getNotForkedRepos(String username);
+
+    List<Branch> getBranchesFromRepo(String username, String repoName);
+
 }
