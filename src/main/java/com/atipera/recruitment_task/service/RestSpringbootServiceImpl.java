@@ -22,9 +22,9 @@ public class RestSpringbootServiceImpl implements RestSpringbootService {
 
     @Override
     public List<Repo> getNotForkedRepos(String username) {
+
         String uri = "https://api.github.com/search/repositories?q=user:"+ username + " forks:0";
         RestTemplate restTemplate = new RestTemplate();
-
         ResponseEntity<Object> responseEntity =
                 restTemplate.getForEntity(uri, Object.class);
         Object response = responseEntity.getBody();
