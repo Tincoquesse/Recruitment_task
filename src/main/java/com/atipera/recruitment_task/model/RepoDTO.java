@@ -7,4 +7,9 @@ public class RepoDTO {
     private String ownerLogin;
     private List<Branch> branches;
 
+    public RepoDTO(String repoName, String ownerLogin, List<Branch> branches) {
+        this.repoName = repoName;
+        this.ownerLogin = ownerLogin;
+        this.branches = branches;
+    }
 }
