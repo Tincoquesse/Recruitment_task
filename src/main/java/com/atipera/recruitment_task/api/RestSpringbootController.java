@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,6 +35,9 @@ public class RestSpringbootController {
         }
         repos.forEach(repo ->
                 repo.setBranches(this.service.getBranchesFromRepo(username, repo.getName())));
-        return ResponseEntity.ok(repos.stream().map(RepoMapper::fromEntity).collect(Collectors.toList()));
+
+        return ResponseEntity.ok(repos.stream()
+                .map(RepoMapper::fromEntity)
+                .collect(Collectors.toList()));
     }
 }
