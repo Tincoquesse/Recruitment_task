@@ -13,13 +13,16 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(value = UserNotFoundException.class)
     public ResponseEntity<ErrorResponseBody> handleUserNotFound(Exception exception) {
-        String message = "The listed users and repositories cannot be searched either because the resources do not exist or you do not have permission to view them.";
-        return new ResponseEntity<>(new ErrorResponseBody(exception.getMessage().toUpperCase(Locale.ROOT), message), HttpStatus.NOT_FOUND);
+        String message = "The listed users and repositories cannot be searched either " +
+                "because the resources do not exist or you do not have permission to view them.";
+        return new ResponseEntity<>(new ErrorResponseBody(exception.getMessage().toUpperCase(Locale.ROOT), message),
+                HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(value = HeaderValueException.class)
     public ResponseEntity<ErrorResponseBody> handle(Exception exception) {
-        return new ResponseEntity<>(new ErrorResponseBody(HttpStatus.NOT_ACCEPTABLE.toString(),
-                exception.getLocalizedMessage()), HttpStatus.NOT_ACCEPTABLE);
+        return new ResponseEntity<>(new ErrorResponseBody
+                (HttpStatus.NOT_ACCEPTABLE.toString(), exception.getLocalizedMessage()),
+                HttpStatus.NOT_ACCEPTABLE);
     }
 }
