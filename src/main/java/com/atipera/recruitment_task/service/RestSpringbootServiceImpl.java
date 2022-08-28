@@ -1,6 +1,5 @@
 package com.atipera.recruitment_task.service;
 
-import com.atipera.recruitment_task.exception.HeaderValueException;
 import com.atipera.recruitment_task.exception.UserNotFoundException;
 import com.atipera.recruitment_task.model.Branch;
 import com.atipera.recruitment_task.model.Repo;
