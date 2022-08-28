@@ -1,44 +1,24 @@
 package com.atipera.recruitment_task.exception;
 
+import com.atipera.recruitment_task.exception.model.ErrorResponseBody;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.client.HttpClientErrorException;
+
+import java.util.Locale;
 
 @ControllerAdvice
 public class RestExceptionHandler {
 
     @ExceptionHandler(value = UserNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleUserNotFound(Exception exception) {
-        return new ResponseEntity<>(new ErrorResponse(404, exception.getMessage()), HttpStatus.NOT_FOUND);
-    }
-}
-
-class ErrorResponse {
-
-    private int status;
-    private String Message;
-
-    public int getStatus() {
-        return status;
+    public ResponseEntity<ErrorResponseBody> handleUserNotFound(Exception exception) {
+        return new ResponseEntity<>(new ErrorResponseBody(exception.getMessage().toUpperCase(Locale.ROOT), "The listed users and repositories cannot be searched either because the resources do not exist or you do not have permission to view them."), HttpStatus.NOT_FOUND);
     }
 
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public String getMessage() {
-        return Message;
-    }
-
-    public void setMessage(String message) {
-        Message = message;
-    }
-
-    public ErrorResponse(int status, String message) {
-        this.status = status;
-        Message = message;
-
-
+    @ExceptionHandler(value = HeaderValueException.class)
+    public ResponseEntity<ErrorResponseBody> handle(HttpClientErrorException exception) {
+        return new ResponseEntity<>(new ErrorResponseBody(exception.getStatusCode().toString(), exception.getLocalizedMessage()), HttpStatus.NOT_ACCEPTABLE);
     }
 }

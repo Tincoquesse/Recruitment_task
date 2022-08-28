@@ -9,13 +9,12 @@ public class Response {
     @JsonProperty("items")
     private Repo[] repos;
 
-
     public Repo[] getRepos() {
         return repos;
     }
 
     public void setRepos(Repo[] repos) {
-        this.repos= repos;
+        this.repos = repos;
     }
 
 }

@@ -1,21 +1,22 @@
 package com.atipera.recruitment_task.api;
 
-import com.atipera.recruitment_task.exception.UserNotFoundException;
+import com.atipera.recruitment_task.exception.HeaderValueException;
 import com.atipera.recruitment_task.model.Repo;
 import com.atipera.recruitment_task.model.RepoDTO;
 import com.atipera.recruitment_task.service.RepoMapper;
 import com.atipera.recruitment_task.service.RestSpringbootService;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping(value = "/api")
 public class RestSpringbootController {
 
 
@@ -25,12 +26,15 @@ public class RestSpringbootController {
         this.service = service;
     }
 
-    @GetMapping("/user/{username}")
-    public ResponseEntity<List<RepoDTO>> getUserData(@PathVariable String username) {
-
+    @GetMapping(value = "/user/{username}/repos", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ExceptionHandler({HttpMediaTypeNotAcceptableException.class})
+    public ResponseEntity<List<RepoDTO>> getUserData(@RequestHeader(HttpHeaders.ACCEPT)
+                                                     @PathVariable String username)
+    {
         List<Repo> repos = this.service.getNotForkedRepos(username);
         repos.forEach(repo ->
                 repo.setBranches(this.service.getBranchesFromRepo(username, repo.getName())));
+
         return ResponseEntity.ok(repos.stream()
                 .map(RepoMapper::fromEntity)
                 .collect(Collectors.toList()));

@@ -13,15 +13,8 @@ public class BranchDTO {
         return commitName;
     }
 
-    public void setCommitName(String commitName) {
-        this.commitName = commitName;
-    }
-
     public String getCommitSha() {
         return commitSha;
     }
 
-    public void setCommitSha(String commitSha) {
-        this.commitSha = commitSha;
-    }
 }

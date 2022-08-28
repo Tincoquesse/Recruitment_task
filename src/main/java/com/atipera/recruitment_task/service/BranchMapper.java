@@ -5,7 +5,7 @@ import com.atipera.recruitment_task.model.BranchDTO;
 
 public class BranchMapper {
 
-    public static BranchDTO fromEntity(Branch branch){
+    public static BranchDTO fromEntity(Branch branch) {
         return new BranchDTO(branch.getName(), branch.getCommit().getSha());
     }
 }

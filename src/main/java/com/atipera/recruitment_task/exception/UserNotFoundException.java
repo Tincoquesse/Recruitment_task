@@ -1,8 +1,12 @@
 package com.atipera.recruitment_task.exception;
 
-public class UserNotFoundException extends RuntimeException{
+import org.springframework.http.HttpStatus;
+import org.springframework.web.client.HttpClientErrorException;
 
-    public UserNotFoundException(String message) {
-        super(message);
+public class UserNotFoundException extends HttpClientErrorException {
+
+    public UserNotFoundException(HttpStatus httpStatus) {
+        super(httpStatus);
     }
 }
+
