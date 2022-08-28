@@ -8,8 +8,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import javax.naming.NameNotFoundException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,31 +22,29 @@ public class RestSpringbootServiceImpl implements RestSpringbootService {
     @Autowired
     private ObjectMapper mapper;
 
+    private final RestTemplate restTemplate = new RestTemplate();
+
     @Override
     public List<Repo> getNotForkedRepos(String username) {
-
-        String uri = "https://api.github.com/search/repositories?q=user:"+ username + " forks:0";
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<Object> responseEntity =
-                restTemplate.getForEntity(uri, Object.class);
-        Object response = responseEntity.getBody();
-
-        if (response == null){
-            throw new UserNotFoundException("User " + username + "was not found");
+        try {
+            String uri = "https://api.github.com/search/repositories?q=user:" + username + " forks:0";
+            ResponseEntity<Object> responseEntity =
+                    restTemplate.getForEntity(uri, Object.class);
+            Object response = responseEntity.getBody();
+            return List.of(mapper.convertValue(response, Response.class).getRepos());
+        } catch (Exception e) {
+            throw new UserNotFoundException("User Not Found");
         }
-        return List.of(mapper.convertValue(response, Response.class).getRepos());
     }
 
     @Override
     public List<Branch> getBranchesFromRepo(String username, String repoName) {
-        String uri = "https://api.github.com/repos/" + username + "/" + repoName + "/branches";
-        RestTemplate restTemplate = new RestTemplate();
 
+        String uri = "https://api.github.com/repos/" + username + "/" + repoName + "/branches";
         ResponseEntity<Object[]> responseEntity =
                 restTemplate.getForEntity(uri, Object[].class);
         Object[] objects = responseEntity.getBody();
 
-        assert objects != null;
         return Arrays.stream(objects)
                 .map(object -> mapper.convertValue(object, Branch.class))
                 .collect(Collectors.toList());

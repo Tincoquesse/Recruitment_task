@@ -29,13 +29,8 @@ public class RestSpringbootController {
     public ResponseEntity<List<RepoDTO>> getUserData(@PathVariable String username) {
 
         List<Repo> repos = this.service.getNotForkedRepos(username);
-
-        if (repos == null) {
-            throw new UserNotFoundException("User " + username + " was not found");
-        }
         repos.forEach(repo ->
                 repo.setBranches(this.service.getBranchesFromRepo(username, repo.getName())));
-
         return ResponseEntity.ok(repos.stream()
                 .map(RepoMapper::fromEntity)
                 .collect(Collectors.toList()));
