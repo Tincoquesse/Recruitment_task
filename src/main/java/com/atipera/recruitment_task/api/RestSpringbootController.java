@@ -4,9 +4,11 @@ import com.atipera.recruitment_task.model.Repo;
 import com.atipera.recruitment_task.model.RepoDTO;
 import com.atipera.recruitment_task.service.RepoMapper;
 import com.atipera.recruitment_task.service.RestSpringbootService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.function.ServerRequest;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,7 +25,7 @@ public class RestSpringbootController {
     }
 
     @GetMapping(value = "/user/{username}/repos", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<RepoDTO>> getUserData(@RequestHeader(value = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<RepoDTO>> getUserData(@RequestHeader(value = HttpHeaders.ACCEPT)
                                                      @PathVariable String username) {
 
         List<Repo> repos = this.service.getNotForkedRepos(username);

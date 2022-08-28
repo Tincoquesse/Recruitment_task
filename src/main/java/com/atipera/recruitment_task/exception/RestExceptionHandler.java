@@ -11,8 +11,6 @@ import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.Locale;
-
 @RestControllerAdvice
 public class RestExceptionHandler {
 
@@ -22,8 +20,8 @@ public class RestExceptionHandler {
     public ResponseEntity<ErrorResponseBody> handleUserNotFound(Exception exception) {
         String message = "The listed users and repositories cannot be searched either " +
                 "because the resources do not exist or you do not have permission to view them.";
-        return new ResponseEntity<>(new ErrorResponseBody("404", message),
-                HttpStatus.NOT_FOUND);
+        ErrorResponseBody errorResponseBody = new ErrorResponseBody("404", message);
+        return new ResponseEntity<>(errorResponseBody, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
