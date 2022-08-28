@@ -1,20 +1,20 @@
 package com.atipera.recruitment_task.model;
 
 public class BranchDTO {
-    private String commitName;
-    private String commitSha;
+    private final String branchName;
+    private final String lastCommitSha;
 
     public BranchDTO(String commitName, String commitSha) {
-        this.commitName = commitName;
-        this.commitSha = commitSha;
+        this.branchName = commitName;
+        this.lastCommitSha = commitSha;
     }
 
-    public String getCommitName() {
-        return commitName;
+    public String getBranchName() {
+        return branchName;
     }
 
-    public String getCommitSha() {
-        return commitSha;
+    public String getLastCommitSha() {
+        return lastCommitSha;
     }
 
 }
