@@ -43,9 +43,11 @@ class ReposGatewayTest {
 
         //WHEN
         Optional<Response> response = reposGateway.getReposByUsername();
+        int size = response.get().getRepos().length;
 
         //THEN
         assertThat(response).isPresent();
+        assertThat(size).isEqualTo(11);
 
     }
     private String read() throws IOException {
