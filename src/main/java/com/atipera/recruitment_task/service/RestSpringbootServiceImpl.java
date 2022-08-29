@@ -25,7 +25,7 @@ public class RestSpringbootServiceImpl implements RestSpringbootService {
     @Override
     public List<Repo> getNotForkedRepos(String username) {
         try {
-            String uri = "https://api.github.com/search/repositories?q=user:" + username + " forks:0";
+            String uri = "https://api.github.com/search/repositories?q=user:" + username + " fork:false";
             Response response = restTemplate.getForEntity(uri, Response.class).getBody();
             return List.of(Objects.requireNonNull(response).getRepos());
         } catch (HttpClientErrorException e) {
