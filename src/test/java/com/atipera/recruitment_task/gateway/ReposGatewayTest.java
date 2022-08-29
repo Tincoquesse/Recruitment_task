@@ -30,19 +30,20 @@ class ReposGatewayTest {
     private ReposGateway reposGateway;
 
     @Rule
-    public WireMockRule wireMockRule = new WireMockRule(8089);
+    public WireMockRule wireMockRule = new WireMockRule();
 
     @Test
     public void success_getReposBy_username_Tincoquesse() throws IOException {
         //GIVEN
-        wireMockRule.stubFor(WireMock.get(urlPathEqualTo("1"))
+        wireMockRule.stubFor(WireMock.get(urlPathEqualTo("https://api.github.com/search/repositories?q=user:Tincoquesse fork:false"))
                 .willReturn(aResponse()
                         .withBody(read())
                         .withHeader(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                        .withStatus(200)));
+                        .withStatus(201)));
 
         //WHEN
         Optional<Response> response = reposGateway.getReposByUsername();
+
         int size = response.get().getRepos().length;
 
         //THEN
