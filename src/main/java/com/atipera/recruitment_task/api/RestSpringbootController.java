@@ -25,7 +25,6 @@ public class RestSpringbootController {
     @GetMapping(value = "/user/{username}/repos", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<RepoDTO>> getUserData(@RequestHeader(value = HttpHeaders.ACCEPT)
                                                      @PathVariable String username) {
-
         List<Repo> repos = this.service.getNotForkedRepos(username);
         repos.forEach(repo ->
                 repo.setBranches(this.service.getBranchesFromRepo(username, repo.getName())));
@@ -34,4 +33,5 @@ public class RestSpringbootController {
                 .map(RepoMapper::fromEntity)
                 .collect(Collectors.toList()));
     }
+
 }
