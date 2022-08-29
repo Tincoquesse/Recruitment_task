@@ -50,7 +50,11 @@ class ReposGatewayTest {
 
     }
     private String read() throws IOException {
+<<<<<<< HEAD
         File file = ResourceUtils.getFile("src\\main\\post\\repos_response_success.json");
+=======
+        File file = ResourceUtils.getFile("src\\main\\post\\post_response_success.json");
+>>>>>>> origin/master
         return new String(Files.readAllBytes(file.toPath()));
     }
 
