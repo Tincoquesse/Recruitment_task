@@ -20,7 +20,11 @@ public class RestSpringbootServiceImpl implements RestSpringbootService {
     @Autowired
     private ObjectMapper mapper;
 
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
+
+    public RestSpringbootServiceImpl(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     @Override
     public List<Repo> getNotForkedRepos(String username) {
