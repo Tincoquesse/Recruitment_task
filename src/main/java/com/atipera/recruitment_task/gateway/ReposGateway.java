@@ -25,7 +25,7 @@ public class ReposGateway {
         this.restTemplate = restTemplate;
         this.reposUrl = reposUrl;
     }
-    public Optional<Response> getReposByUsername() {
+    public Optional<Response> getReposByRepoName() {
         String url = String.format("%s", reposUrl);
         try {
             return Optional.ofNullable(restTemplate.getForObject(url, Response.class));
