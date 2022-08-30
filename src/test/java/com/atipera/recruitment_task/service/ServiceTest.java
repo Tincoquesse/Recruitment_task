@@ -1,5 +1,6 @@
-package com.atipera.recruitment_task;
+package com.atipera.recruitment_task.service;
 
+import com.atipera.recruitment_task.model.Repo;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import org.junit.jupiter.api.AfterEach;
@@ -12,12 +13,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
+
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest
-class WireMockConfigurationTest {
+class ServiceTest {
+
+    @Autowired
+    RestSpringbootService restSpringbootService;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -27,7 +33,7 @@ class WireMockConfigurationTest {
     @BeforeEach
     void configureSystemUnderTest() {
         this.wireMockServer = new WireMockServer(options()
-                .dynamicPort()
+                .port(8080)
         );
         this.wireMockServer.start();
     }
@@ -38,20 +44,20 @@ class WireMockConfigurationTest {
     }
 
     @Test
-    @DisplayName("Should return the configured HTTP response")
-    void shouldReturnHttpConfiguredHttpResponse() {
+    void shouldReturnNonForkedRepoList() {
+        //GIVEN
         wireMockServer.stubFor(
-                WireMock.get("/api/search/repositories?q=user:Tincoquesse%20fork:false").willReturn(aResponse()
+                WireMock.get("/api/search/repositories?q=user:Tincoquesse fork:false").willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
                         .withBodyFile("json/repos_response_success.json")
                 ));
 
-        String serverUrl = buildApiMethodUrl("Tincoquesse");
-        ResponseEntity<String> response = restTemplate.getForEntity(serverUrl,
-                String.class
-        );
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        //WHEN
+        List<Repo> notForkedRepos = restSpringbootService.getNotForkedRepos("Tincoquesse");
+
+        //THEN
+        assertThat(notForkedRepos.size()).isEqualTo(11);
 
     }
 
