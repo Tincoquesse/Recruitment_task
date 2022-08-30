@@ -4,8 +4,6 @@ import com.atipera.recruitment_task.exception.UserNotFoundException;
 import com.atipera.recruitment_task.model.Branch;
 import com.atipera.recruitment_task.model.Repo;
 import com.atipera.recruitment_task.model.Response;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -15,14 +13,11 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
-public class RestSpringbootServiceImpl implements RestSpringbootService {
-
-    @Autowired
-    private ObjectMapper mapper;
+public class GithubClientServiceImpl implements GithubClientService {
 
     private final RestTemplate restTemplate;
 
-    public RestSpringbootServiceImpl(RestTemplate restTemplate) {
+    public GithubClientServiceImpl(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 

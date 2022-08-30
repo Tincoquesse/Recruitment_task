@@ -24,7 +24,7 @@ public class RestExceptionHandler {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         ErrorResponseBody errorResponseBody = new ErrorResponseBody("404", message);
-        return new ResponseEntity<>(errorResponseBody,headers , HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(errorResponseBody, headers, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
@@ -42,4 +42,6 @@ public class RestExceptionHandler {
         ErrorResponseBody response = new ErrorResponseBody("403", e.getMessage());
         return new ResponseEntity<>(response, headers, HttpStatus.FORBIDDEN);
     }
+
+
 }

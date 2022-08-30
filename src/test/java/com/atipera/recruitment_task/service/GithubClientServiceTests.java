@@ -22,10 +22,10 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
 import static org.apache.http.HttpHeaders.CONTENT_TYPE;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 @SpringBootTest
-class RestSpringbootServiceImplTest {
+class GithubClientServiceTests {
 
     @Autowired
-    RestSpringbootService restSpringbootService;
+    GithubClientService restSpringbootService;
 
     private WireMockServer wireMockServer;
 
