@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 @Service
 public class RecruitmentTaskApplicationServiceImpl implements RecruitmentTaskApplicationService{
 
-    private GithubClientService githubClientService;
+    private final GithubClientService githubClientService;
 
     public RecruitmentTaskApplicationServiceImpl(GithubClientService githubClientService) {
         this.githubClientService = githubClientService;

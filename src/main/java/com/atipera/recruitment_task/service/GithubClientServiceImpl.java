@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
-public class GithubClientServiceImpl implements GithubClientService {
+class GithubClientServiceImpl implements GithubClientService {
 
     private final RestTemplate restTemplate;
 
