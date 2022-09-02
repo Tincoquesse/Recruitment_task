@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import java.util.List;
 import java.util.Objects;
@@ -32,7 +33,7 @@ class GithubClientServiceImpl implements GithubClientService {
                     .block();
             return List.of(Objects.requireNonNull(response).getRepos());
 
-        } catch (HttpClientErrorException e) {
+        } catch (WebClientResponseException e) {
             throw new UserNotFoundException(HttpStatus.NOT_FOUND);
         }
     }
