@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
@@ -21,18 +20,18 @@ class GithubClientServiceImpl implements GithubClientService {
     private WebClient.Builder webClientBuilder;
 
 
-    private final RestTemplate restTemplate;
-
-    public GithubClientServiceImpl(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
-
     @Override
     public List<Repo> getNotForkedRepos(String username) {
+        String uri = "https://api.github.com/search/repositories?q=user:" + username + " fork:false";
         try {
-            String uri = "https://api.github.com/search/repositories?q=user:" + username + " fork:false";
-            Response response = restTemplate.getForEntity(uri, Response.class).getBody();
+            Response response = webClientBuilder.build()
+                    .get()
+                    .uri(uri)
+                    .retrieve()
+                    .bodyToMono(Response.class)
+                    .block();
             return List.of(Objects.requireNonNull(response).getRepos());
+
         } catch (HttpClientErrorException e) {
             throw new UserNotFoundException(HttpStatus.NOT_FOUND);
         }
@@ -41,12 +40,16 @@ class GithubClientServiceImpl implements GithubClientService {
     @Override
     public List<Branch> getBranchesFromRepo(String username, String repoName) {
         String uri = "https://api.github.com/repos/" + username + "/" + repoName + "/branches";
-        Branch[] branches = webClientBuilder.build()
-                .get()
-                .uri(uri)
-                .retrieve()
-                .bodyToMono(Branch[].class)
-                .block();
-        return List.of(Objects.requireNonNull(branches));
+        try {
+            Branch[] branches = webClientBuilder.build()
+                    .get()
+                    .uri(uri)
+                    .retrieve()
+                    .bodyToMono(Branch[].class)
+                    .block();
+            return List.of(Objects.requireNonNull(branches));
+        } catch (Exception e) {
+            throw new HttpClientErrorException(HttpStatus.FORBIDDEN, " API rate limit exceeded");
+        }
     }
 }
