@@ -4,16 +4,22 @@ import com.atipera.recruitment_task.exception.UserNotFoundException;
 import com.atipera.recruitment_task.model.Branch;
 import com.atipera.recruitment_task.model.Repo;
 import com.atipera.recruitment_task.model.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 import java.util.Objects;
 
 @Service
 class GithubClientServiceImpl implements GithubClientService {
+
+    @Autowired
+    private WebClient.Builder webClientBuilder;
+
 
     private final RestTemplate restTemplate;
 
@@ -35,7 +41,12 @@ class GithubClientServiceImpl implements GithubClientService {
     @Override
     public List<Branch> getBranchesFromRepo(String username, String repoName) {
         String uri = "https://api.github.com/repos/" + username + "/" + repoName + "/branches";
-        Branch[] branches = restTemplate.getForEntity(uri, Branch[].class).getBody();
+        Branch[] branches = webClientBuilder.build()
+                .get()
+                .uri(uri)
+                .retrieve()
+                .bodyToMono(Branch[].class)
+                .block();
         return List.of(Objects.requireNonNull(branches));
     }
 }
